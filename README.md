@@ -3,10 +3,18 @@ HBBR_Scanner
 
 3D Laser Scanner Software with Kivy based multi-platform GUI in python.
 
-Depends on:
+### Supported Platforms
++ Linux - PC Ubuntu, Raspberry Pi
++ Windows
++ OS X
 
+### Depends on:
 + Kivy
 + OpenCV with python bindings
+
+### Supported scanner hardware
++ FabScan100 turtable
++ USB webcam
 
 Scan methods
 ------------
