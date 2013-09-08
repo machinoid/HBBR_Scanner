@@ -19,8 +19,6 @@
  
 
 import sys
-import termios
-import fcntl
 import os
 import sys
 import time
@@ -164,7 +162,7 @@ class FabScanTurnTable():
         print('laser turned off')
 
 
-    def on_connect(self):
+    def on_connect(self,port):
          self.serial = serial.Serial(port, baudrate, timeout=3)
          print('serial opened')
          

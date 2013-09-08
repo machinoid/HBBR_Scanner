@@ -1,4 +1,5 @@
 <CaptureController>:
+    port: myport.text
     scan_name: myscan_name.text
     image_name: myimage_name.text
     image_counter: myimage_counter.text
@@ -15,7 +16,10 @@
         pos_hint: {'x':.034, 'y':0}
         size_hint: None, None
         size: 800, 600
-        resolution: 1280, 960
+#        resolution: -1, -1
+        resolution: 640, 480
+#        resolution: 1280, 720
+#        resolution: 1280, 960
         play: 'False'
         on_parent: root.mycamera = self
 
@@ -156,9 +160,9 @@
             on_press: root.on_connect()
 
         TextInput:
-            id: tabledev
+            id: myport
             group: 'table'
-            text: '/dev/ttyUSB0'
+            text: root.port
             multiline: False
             background_color: 0, 0, 1, 1
             font_size: 16

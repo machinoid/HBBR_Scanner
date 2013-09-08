@@ -20,8 +20,6 @@
 
 
 import sys
-import termios
-import fcntl
 import os
 import sys
 import time
@@ -30,6 +28,7 @@ import subprocess
 from threading import Thread
 from collections import deque
 #from time import sleep
+from sys import platform as _platform
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -42,7 +41,7 @@ from kivy.properties import ObjectProperty, StringProperty, OptionProperty, \
 # Use fabscan
 import fabscan as Table
 from fabscan import FabScanTurnTable as TurnTable
-port = "/dev/ttyUSB0"
+port = ""
 
 
 
@@ -63,15 +62,15 @@ class Scanner(Thread):
         super(Scanner, self).__init__()
 
 	self.table = None
-        self.laser_angle = 0.0
-        self.quit = False
-        self.name = 'image'
-        self.do = Scanner.DO_NOTHING
-        self.texture = None
-        self.camera = None
-        self.controller = None
-        self.scan_cnt  = 0
-        self.scan_max_cnt = 0
+	self.laser_angle = 0.0
+	self.quit = False
+	self.name = 'image'
+	self.do = Scanner.DO_NOTHING
+	self.texture = None
+	self.camera = None
+	self.controller = None
+	self.scan_cnt  = 0
+	self.scan_max_cnt = 0
 
 
     def grab_texture(self, texture, name):
@@ -217,9 +216,9 @@ class Scanner(Thread):
     def get_laser_angle(self):
          return self.laser_angle
 
-    def on_connect(self):
+    def on_connect(self, port):
          self.table = Table.FabScanTurnTable()
-         self.table.on_connect()
+         self.table.on_connect(port)
          print('scanner opened')
          
 
@@ -229,6 +228,7 @@ class Scanner(Thread):
 
 class CaptureController(BoxLayout):
     # properties
+    port=StringProperty('')
     scan_name=StringProperty('User')
     image_name=StringProperty('image')
     image_counter=StringProperty('00000')
@@ -250,6 +250,10 @@ class CaptureController(BoxLayout):
         Clock.schedule_interval(self.grab_image_callback, 1 / 4)
         # sanity debug
         print('ids' + str(self.ids))
+
+    def on_port(self, instance, value):
+        self.port = value
+        print('port changed to ' + value)
 
     # propeties handling
     def on_scan_name(self, instance, value):
@@ -354,7 +358,7 @@ class CaptureController(BoxLayout):
             self.image_action = Scanner.DO_DONE
  
     def on_connect(self):
-         self.scanner.on_connect()
+         self.scanner.on_connect(self.port)
 
     def on_grab(self, usecnt, postfix):
         if self.image_action == Scanner.DO_NOTHING or  self.image_action == Scanner.DO_DONE:
@@ -414,9 +418,19 @@ class CaptureApp(App):
         Window.add_widget(root)
 
     def build(self):
+	if _platform == "linux" or _platform == "linux2":
+		# linux
+		port = "/dev/ttyUSB0"
+	elif _platform == "darwin":
+		# OS X
+		port = "/dev/ttyUSB0"
+	elif _platform == "win32":
+		port = "COM"
+    # Windows...
 #        Clock.schedule_interval(self._print_fps, 1)
         Window.bind(on_keyboard=self._reload_keypress)
         self.controller = CaptureController()
+	self.controller.port = port
 	return self.controller
 
 
