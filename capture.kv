@@ -1,0 +1,165 @@
+<CaptureController>:
+    scan_name: myscan_name.text
+    image_name: myimage_name.text
+    image_counter: myimage_counter.text
+    table_angle: mytable_angle.text
+    table_step: mytable_step.text
+    laser_angle: mylaser_angle.text
+
+    orientation: 'vertical'
+    spacing: 5
+    padding: 5
+
+    Camera:
+        id: mycamera
+        pos_hint: {'x':.034, 'y':0}
+        size_hint: None, None
+        size: 800, 600
+        resolution: 1280, 960
+        play: 'False'
+        on_parent: root.mycamera = self
+
+
+    BoxLayout:
+        size_hint_y: None
+        height: 30
+
+        ToggleButton:
+            group: 'video'
+            text: 'Start'
+            state: 'normal'
+            on_press: root.on_start()
+
+        ToggleButton:
+            group: 'video'
+            text: 'Stop'
+            state: 'normal'
+            on_press: root.on_stop()
+
+        Label:
+            id: mycameresolution
+            text: str(mycamera.resolution)
+
+        Slider:
+            value: 10
+            max: 100
+            on_value: print(args[1])
+
+    BoxLayout:
+        size_hint_y: None
+        height: 50
+        spacing: 5
+
+        ToggleButton:
+            group: 'video'
+            text: 'Play'
+            state: 'down' if mycamera.play else 'normal'
+            on_press: mycamera.play = True
+
+        ToggleButton:
+            group: 'video'
+            text: 'Suspend'
+            state: 'down' if not mycamera.play else 'normal'
+            on_press: mycamera.play = False
+
+        ToggleButton:
+            group: 'video'
+            text: 'Grab'
+            state: 'down'
+            on_press: root.on_grab(True,'')
+
+        TextInput:
+            id: myimage_name
+            group: 'video'
+            text: root.image_name
+            multiline: False
+            background_color: 0, 0, 1, 1
+            font_size: 24
+
+        TextInput:
+            id: myimage_counter
+            group: 'video'
+            text: root.image_counter
+            multiline: False
+            background_color: 0, 0, 1, 1
+            font_size: 24
+
+    BoxLayout:
+        size_hint_y: None
+        height: 50
+        spacing: 5
+
+        TextInput:
+            id: mytable_angle
+            group: 'laser'
+            text: root.table_angle
+            multiline: False
+            background_color: 0, 0, 1, 1
+            font_size: 24
+
+        Spinner:
+            id: myscan_name
+            group: 'laser'
+            text: root.scan_name
+            values: ('Poor', 'Normal', 'Good', 'Best', 'User')
+
+        TextInput:
+            id: mylaser_angle
+            group: 'laser'
+            text: root.laser_angle
+            multiline: False
+            background_color: 0, 0, 1, 1
+            font_size: 24
+
+        ToggleButton:
+            group: 'laser'
+            text: 'Detect Laser'
+            state: 'down'
+            on_press: root.on_detect_laser()
+
+        ToggleButton:
+            group: 'laser'
+            text: 'Toggle Laser'
+            state: 'down'
+            on_press: root.on_toggle_laser()
+
+
+    BoxLayout:
+        size_hint_y: None
+        height: 50
+        spacing: 5
+
+        TextInput:
+            id: mytable_step
+            group: 'table'
+            text: root.table_step
+            multiline: False
+            background_color: 0, 0, 1, 1
+            font_size: 24
+
+        ToggleButton:
+            group: 'table'
+            text: 'Left'
+            state: 'down'
+            on_press: root.on_turn_left()
+
+        ToggleButton:
+            group: 'table'
+            text: 'Right'
+            state: 'down'
+            on_press: root.on_turn_right()
+
+        ToggleButton:
+            group: 'table'
+            text: 'Connect'
+            state: 'down'
+            on_press: root.on_connect()
+
+        TextInput:
+            id: tabledev
+            group: 'table'
+            text: '/dev/ttyUSB0'
+            multiline: False
+            background_color: 0, 0, 1, 1
+            font_size: 16
+
