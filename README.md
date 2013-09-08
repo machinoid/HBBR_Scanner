@@ -11,6 +11,7 @@ HBBR_Scanner
 ### Depends on:
 + Kivy
 + OpenCV with python bindings
++ PySerial
 
 ### Supported hardware
 + FabScan100 style turntable
